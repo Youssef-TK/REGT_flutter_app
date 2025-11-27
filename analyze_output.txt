@@ -1,0 +1,95 @@
+Analyzing regt_app...                                           
+
+  error - Missing concrete implementation of 'abstract class State<T extends StatefulWidget> with Diagnosticable.build' - lib\screens\ads_screen.dart:19:7 - non_abstract_class_inherits_abstract_member
+warning - The declaration '_showAd' isn't referenced - lib\screens\ads_screen.dart:163:8 - unused_element
+  error - A try block must be followed by an 'on', 'catch', or 'finally' clause - lib\screens\ads_screen.dart:183:9 - missing_catch_or_finally
+warning - The declaration 'initState' isn't referenced - lib\screens\ads_screen.dart:230:8 - unused_element
+  error - Local variable '_loadConfig' can't be referenced before it is declared - lib\screens\ads_screen.dart:232:5 - referenced_before_declaration
+  error - Local variable '_loadAd' can't be referenced before it is declared - lib\screens\ads_screen.dart:233:5 - referenced_before_declaration
+  error - Local variable '_loadAdsWatched' can't be referenced before it is declared - lib\screens\ads_screen.dart:234:5 - referenced_before_declaration
+  error - Local variable '_loadConfig' can't be referenced before it is declared - lib\screens\ads_screen.dart:237:18 - referenced_before_declaration
+   info - The local variable '_loadConfig' starts with an underscore - lib\screens\ads_screen.dart:241:16 - no_leading_underscores_for_local_identifiers
+   info - The local variable '_loadAdsWatched' starts with an underscore - lib\screens\ads_screen.dart:283:16 - no_leading_underscores_for_local_identifiers
+   info - The local variable '_loadAd' starts with an underscore - lib\screens\ads_screen.dart:310:8 - no_leading_underscores_for_local_identifiers
+   info - The local variable '_showAd' starts with an underscore - lib\screens\ads_screen.dart:347:8 - no_leading_underscores_for_local_identifiers
+  error - Local variable '_handleReferrerCommission' can't be referenced before it is declared - lib\screens\ads_screen.dart:430:17 - referenced_before_declaration
+  error - Local variable '_startCooldownTimer' can't be referenced before it is declared - lib\screens\ads_screen.dart:440:11 - referenced_before_declaration
+  error - Local variable '_showRewardModal' can't be referenced before it is declared - lib\screens\ads_screen.dart:441:11 - referenced_before_declaration
+   info - The local variable '_handleReferrerCommission' starts with an underscore - lib\screens\ads_screen.dart:457:16 - no_leading_underscores_for_local_identifiers
+   info - The local variable '_startCooldownTimer' starts with an underscore - lib\screens\ads_screen.dart:551:8 - no_leading_underscores_for_local_identifiers
+   info - The local variable '_formatCooldown' starts with an underscore - lib\screens\ads_screen.dart:568:10 - no_leading_underscores_for_local_identifiers
+   info - The local variable '_showRewardModal' starts with an underscore - lib\screens\ads_screen.dart:591:8 - no_leading_underscores_for_local_identifiers
+warning - The declaration 'dispose' isn't referenced - lib\screens\ads_screen.dart:651:8 - unused_element
+warning - The declaration 'build' isn't referenced - lib\screens\ads_screen.dart:659:10 - unused_element
+  error - Expected to find ';' - lib\screens\ads_screen.dart:959:1 - expected_token
+  error - Expected to find ')' - lib\screens\ads_screen.dart:959:2 - expected_token
+  error - Expected to find '}' - lib\screens\ads_screen.dart:959:2 - expected_token
+  error - Missing concrete implementation of 'abstract class State<T extends StatefulWidget> with Diagnosticable.build' - lib\screens\home_screen.dart:38:7 - non_abstract_class_inherits_abstract_member
+  error - A try block must be followed by an 'on', 'catch', or 'finally' clause - lib\screens\home_screen.dart:105:5 - missing_catch_or_finally
+  error - This requires the 'dot-shorthands' language feature to be enabled - lib\screens\home_screen.dart:160:11 - experiment_not_enabled
+  error - The static method or constructor 'eq' isn't defined for the context type '_' - lib\screens\home_screen.dart:160:12 - dot_shorthand_undefined_member
+  error - Undefined name 'referralData' - lib\screens\home_screen.dart:165:21 - undefined_identifier
+  error - Local variable '_safeParseDouble' can't be referenced before it is declared - lib\screens\home_screen.dart:172:30 - referenced_before_declaration
+  error - Undefined name 'referralData' - lib\screens\home_screen.dart:186:27 - undefined_identifier
+  error - The await expression can only be used in an async function - lib\screens\home_screen.dart:194:31 - await_in_wrong_context
+  error - 'catch' can't be used as an identifier because it's a keyword - lib\screens\home_screen.dart:238:7 - expected_identifier_but_got_keyword
+  error - The method 'catch' isn't defined for the type '_HomeScreenState' - lib\screens\home_screen.dart:238:7 - undefined_method
+  error - Undefined name 'e' - lib\screens\home_screen.dart:238:14 - undefined_identifier
+  error - Expected to find ';' - lib\screens\home_screen.dart:238:15 - expected_token
+  error - Undefined name 'e' - lib\screens\home_screen.dart:239:40 - undefined_identifier
+  error - 'finally' can't be used as an identifier because it's a keyword - lib\screens\home_screen.dart:240:7 - expected_identifier_but_got_keyword
+  error - Expected a statement - lib\screens\home_screen.dart:240:7 - missing_statement
+  error - Expected to find ';' - lib\screens\home_screen.dart:240:7 - expected_token
+  error - Undefined name 'finally' - lib\screens\home_screen.dart:240:7 - undefined_identifier
+  error - Expected to find ';' - lib\screens\home_screen.dart:245:3 - expected_token
+  error - Expected to find ')' - lib\screens\home_screen.dart:247:3 - expected_token
+   info - The local variable '_loadMoreHistory' starts with an underscore - lib\screens\home_screen.dart:247:8 - no_leading_underscores_for_local_identifiers
+   info - The local variable '_loadMoreWithdrawals' starts with an underscore - lib\screens\home_screen.dart:253:8 - no_leading_underscores_for_local_identifiers
+warning - The declaration 'dispose' isn't referenced - lib\screens\home_screen.dart:260:8 - unused_element
+   info - The local variable '_formatTimeAgo' starts with an underscore - lib\screens\home_screen.dart:282:10 - no_leading_underscores_for_local_identifiers
+   info - The local variable '_getTransactionIcon' starts with an underscore - lib\screens\home_screen.dart:294:12 - no_leading_underscores_for_local_identifiers
+   info - The local variable '_formatDescription' starts with an underscore - lib\screens\home_screen.dart:309:10 - no_leading_underscores_for_local_identifiers
+   info - The local variable '_showShareModal' starts with an underscore - lib\screens\home_screen.dart:316:8 - no_leading_underscores_for_local_identifiers
+   info - The local variable '_buildHomeContent' starts with an underscore - lib\screens\home_screen.dart:320:10 - no_leading_underscores_for_local_identifiers
+  error - Local variable '_buildAmountWithCoin' can't be referenced before it is declared - lib\screens\home_screen.dart:366:21 - referenced_before_declaration
+  error - Local variable '_buildAmountWithCoin' can't be referenced before it is declared - lib\screens\home_screen.dart:414:29 - referenced_before_declaration
+  error - Local variable '_buildAmountWithCoin' can't be referenced before it is declared - lib\screens\home_screen.dart:508:21 - referenced_before_declaration
+   info - Don't use 'BuildContext's across async gaps, guarded by an unrelated 'mounted' check - lib\screens\home_screen.dart:587:52 - use_build_context_synchronously
+  error - Local variable '_buildStatCard' can't be referenced before it is declared - lib\screens\home_screen.dart:649:17 - referenced_before_declaration
+  error - Local variable '_buildStatCard' can't be referenced before it is declared - lib\screens\home_screen.dart:650:17 - referenced_before_declaration
+  error - Local variable '_buildAmountWithCoin' can't be referenced before it is declared - lib\screens\home_screen.dart:702:29 - referenced_before_declaration
+warning - The value of the local variable 'formattedApprovedDate' isn't used - lib\screens\home_screen.dart:844:30 - unused_local_variable
+warning - The value of the local variable 'formattedApprovedTime' isn't used - lib\screens\home_screen.dart:845:30 - unused_local_variable
+warning - The value of the local variable 'formattedRequestDate' isn't used - lib\screens\home_screen.dart:856:29 - unused_local_variable
+warning - The value of the local variable 'formattedRequestTime' isn't used - lib\screens\home_screen.dart:857:29 - unused_local_variable
+  error - Local variable '_buildDetailRow' can't be referenced before it is declared - lib\screens\home_screen.dart:878:37 - referenced_before_declaration
+  error - Local variable '_buildDetailRow' can't be referenced before it is declared - lib\screens\home_screen.dart:879:37 - referenced_before_declaration
+  error - Local variable '_buildDetailRow' can't be referenced before it is declared - lib\screens\home_screen.dart:880:37 - referenced_before_declaration
+  error - Local variable '_buildDetailRow' can't be referenced before it is declared - lib\screens\home_screen.dart:881:37 - referenced_before_declaration
+  error - Local variable '_buildDetailRow' can't be referenced before it is declared - lib\screens\home_screen.dart:882:37 - referenced_before_declaration
+  error - Local variable '_buildExpandableDetailRow' can't be referenced before it is declared - lib\screens\home_screen.dart:886:37 - referenced_before_declaration
+  error - Local variable '_buildCopyableDetailRow' can't be referenced before it is declared - lib\screens\home_screen.dart:892:37 - referenced_before_declaration
+  error - Local variable '_buildExpandableDetailRow' can't be referenced before it is declared - lib\screens\home_screen.dart:898:37 - referenced_before_declaration
+  error - Local variable '_buildAmountWithCoin' can't be referenced before it is declared - lib\screens\home_screen.dart:960:33 - referenced_before_declaration
+  error - Local variable '_buildAmountWithCoin' can't be referenced before it is declared - lib\screens\home_screen.dart:1092:31 - referenced_before_declaration
+   info - The local variable '_buildDetailRow' starts with an underscore - lib\screens\home_screen.dart:1124:10 - no_leading_underscores_for_local_identifiers
+   info - The local variable '_buildExpandableDetailRow' starts with an underscore - lib\screens\home_screen.dart:1147:10 - no_leading_underscores_for_local_identifiers
+   info - The local variable '_buildCopyableDetailRow' starts with an underscore - lib\screens\home_screen.dart:1179:10 - no_leading_underscores_for_local_identifiers
+   info - The local variable '_safeParseDouble' starts with an underscore - lib\screens\home_screen.dart:1243:10 - no_leading_underscores_for_local_identifiers
+warning - The declaration 'build' isn't referenced - lib\screens\home_screen.dart:1251:10 - unused_element
+   info - The local variable '_buildStatCard' starts with an underscore - lib\screens\home_screen.dart:1284:10 - no_leading_underscores_for_local_identifiers
+   info - The local variable '_buildAmountWithCoin' starts with an underscore - lib\screens\home_screen.dart:1315:10 - no_leading_underscores_for_local_identifiers
+  error - Expected to find '}' - lib\screens\home_screen.dart:1332:2 - expected_token
+   info - Don't use 'BuildContext's across async gaps - lib\screens\post_login_setup_screen.dart:493:52 - use_build_context_synchronously
+warning - The value of the field '_showActivityLogs' isn't used - lib\screens\profile_screen.dart:1800:14 - unused_field
+warning - The value of the field '_showChangePasswordModal' isn't used - lib\screens\profile_screen.dart:1817:8 - unused_field
+warning - The value of the field '_passwordError' isn't used - lib\screens\profile_screen.dart:1818:11 - unused_field
+   info - Don't use 'BuildContext's across async gaps, guarded by an unrelated 'mounted' check - lib\screens\profile_screen.dart:1933:28 - use_build_context_synchronously
+   info - Don't use 'BuildContext's across async gaps, guarded by an unrelated 'mounted' check - lib\screens\profile_screen.dart:1954:28 - use_build_context_synchronously
+   info - Don't use 'BuildContext's across async gaps, guarded by an unrelated 'mounted' check - lib\screens\profile_screen.dart:1969:28 - use_build_context_synchronously
+   info - Don't use 'BuildContext's across async gaps, guarded by an unrelated 'mounted' check - lib\screens\profile_screen.dart:1982:28 - use_build_context_synchronously
+warning - The declaration '_formatTimeAgo' isn't referenced - lib\screens\profile_screen.dart:1996:10 - unused_element
+warning - The declaration '_changePassword' isn't referenced - lib\screens\profile_screen.dart:2014:16 - unused_element
+   info - Don't use 'BuildContext's across async gaps - lib\screens\profile_screen.dart:2040:28 - use_build_context_synchronously
+warning - The declaration '_combinedLogs' isn't referenced - lib\screens\profile_screen.dart:2125:34 - unused_element
+
