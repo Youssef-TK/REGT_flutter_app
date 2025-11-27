@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -54,40 +55,11 @@ class _ReferralsScreenState extends State<ReferralsScreen> {
     _referralLink = referralCode;
   }
 
-  // Future<void> _checkIfReferred() async {
-  //   final userId = Supabase.instance.client.auth.currentUser?.id;
-  //   if (userId == null) return;
-
-  //   final response = await Supabase.instance.client.from('referrals').select('referred_id').eq('referred_id', userId);
-  //   setState(() {
-  //     _hasReferrer = response.isNotEmpty;
-  //   });
-  // }
 
   String _referrerCode = '';
   String _referrerEmail = '';
 
-  // Future<void> _checkIfReferred() async {
-  //   final userId = Supabase.instance.client.auth.currentUser?.id;
-  //   if (userId == null) return;
-
-  //   try {
-  //     final response = await Supabase.instance.client
-  //         .from('referrals')
-  //         .select('referrer_id') // Use a real column from the schema
-  //         .eq('referred_id', userId)
-  //         .limit(1); // Only need 1 row to confirm existence
-
-  //     setState(() {
-  //       _hasReferrer = response.isNotEmpty;
-  //     });
-  //   } catch (e) {
-  //     debugPrint('Error checking referral: $e');
-  //     setState(() {
-  //       _hasReferrer = false; // Fallback
-  //     });
-  //   }
-  // }
+  
 
   Future<void> _checkIfReferred() async {
     final userId = Supabase.instance.client.auth.currentUser?.id;
@@ -203,117 +175,6 @@ class _ReferralsScreenState extends State<ReferralsScreen> {
     }
   }
 
-  // void _showShareModal() {
-  //   showDialog(
-  //     context: context,
-  //     builder: (BuildContext context) {
-  //       return AlertDialog(
-  //         backgroundColor: const Color(0xff1a1a1a),
-  //         shape: RoundedRectangleBorder(
-  //           borderRadius: BorderRadius.circular(12),
-  //         ),
-  //         title: const Center(
-  //           child: Text(
-  //             'Share Your Link',
-  //             style: TextStyle(
-  //               color: Colors.white,
-  //               fontSize: 20,
-  //               fontWeight: FontWeight.w600,
-  //             ),
-  //           ),
-  //         ),
-  //         content: Column(
-  //           mainAxisSize: MainAxisSize.min,
-  //           children: [
-  //             ElevatedButton(
-  //               onPressed: () {
-  //                 launchUrl(
-  //                   Uri.parse(
-  //                     'https://wa.me/?text=${Uri.encodeComponent('Join REGT Token Earning Platform: $_referralLink')}',
-  //                   ),
-  //                 );
-  //                 Navigator.of(context).pop();
-  //               },
-  //               style: ElevatedButton.styleFrom(
-  //                 backgroundColor: Colors.green[600],
-  //                 minimumSize: const Size(double.infinity, 48),
-  //                 shape: RoundedRectangleBorder(
-  //                   borderRadius: BorderRadius.circular(8),
-  //                 ),
-  //               ),
-  //               child: const Row(
-  //                 mainAxisAlignment: MainAxisAlignment.center,
-  //                 children: [
-  //                   Icon(Icons.link, color: Colors.white),
-  //                   SizedBox(width: 8),
-  //                   Text('WhatsApp', style: TextStyle(color: Colors.white)),
-  //                 ],
-  //               ),
-  //             ),
-  //             const SizedBox(height: 8),
-  //             ElevatedButton(
-  //               onPressed: () {
-  //                 launchUrl(
-  //                   Uri.parse(
-  //                     'https://t.me/share/url?url=${Uri.encodeComponent(_referralLink)}&text=${Uri.encodeComponent('Join REGT Token Earning Platform')}',
-  //                   ),
-  //                 );
-  //                 Navigator.of(context).pop();
-  //               },
-  //               style: ElevatedButton.styleFrom(
-  //                 backgroundColor: Colors.blue[600],
-  //                 minimumSize: const Size(double.infinity, 48),
-  //                 shape: RoundedRectangleBorder(
-  //                   borderRadius: BorderRadius.circular(8),
-  //                 ),
-  //               ),
-  //               child: const Row(
-  //                 mainAxisAlignment: MainAxisAlignment.center,
-  //                 children: [
-  //                   Icon(Icons.link, color: Colors.white),
-  //                   SizedBox(width: 8),
-  //                   Text('Telegram', style: TextStyle(color: Colors.white)),
-  //                 ],
-  //               ),
-  //             ),
-  //             const SizedBox(height: 8),
-  //             ElevatedButton(
-  //               onPressed: () {
-  //                 launchUrl(
-  //                   Uri.parse(
-  //                     'mailto:?subject=Join REGT Token Earning Platform&body=${Uri.encodeComponent(_referralLink)}',
-  //                   ),
-  //                 );
-  //                 Navigator.of(context).pop();
-  //               },
-  //               style: ElevatedButton.styleFrom(
-  //                 backgroundColor: Colors.grey[600],
-  //                 minimumSize: const Size(double.infinity, 48),
-  //                 shape: RoundedRectangleBorder(
-  //                   borderRadius: BorderRadius.circular(8),
-  //                 ),
-  //               ),
-  //               child: const Row(
-  //                 mainAxisAlignment: MainAxisAlignment.center,
-  //                 children: [
-  //                   Icon(Icons.link, color: Colors.white),
-  //                   SizedBox(width: 8),
-  //                   Text('Email', style: TextStyle(color: Colors.white)),
-  //                 ],
-  //               ),
-  //             ),
-  //           ],
-  //         ),
-  //         actions: [
-  //           TextButton(
-  //             onPressed: () => Navigator.of(context).pop(),
-  //             child: const Text('Close', style: TextStyle(color: Colors.grey)),
-  //           ),
-  //         ],
-  //       );
-  //     },
-  //   );
-  // }
 
   void _showShareModal() {
     Share.share(_referralLink);
@@ -530,72 +391,7 @@ class _ReferralsScreenState extends State<ReferralsScreen> {
           ),
         ),
 
-        // if (!_hasReferrer)
-        //   Padding(
-        //     padding: const EdgeInsets.all(16),
-        //     child: Container(
-        //       padding: const EdgeInsets.all(16),
-        //       decoration: BoxDecoration(
-        //         gradient: const LinearGradient(
-        //           begin: Alignment.centerLeft,
-        //           end: Alignment.centerRight,
-        //           colors: [Color(0xff1a1a1a), Color(0xff2a2a2a)],
-        //         ),
-        //         borderRadius: BorderRadius.circular(12),
-        //         border: Border.all(
-        //           color: const Color(0xffFFD700).withOpacity(0.2),
-        //         ),
-        //       ),
-        //       child: Column(
-        //         crossAxisAlignment: CrossAxisAlignment.start,
-        //         children: [
-        //           const Row(
-        //             children: [
-        //               Icon(Icons.add, color: Color(0xffFFD700), size: 20),
-        //               SizedBox(width: 8),
-        //               Text(
-        //                 'Add Referral Code',
-        //                 style: TextStyle(
-        //                   color: Colors.white,
-        //                   fontSize: 16,
-        //                   fontWeight: FontWeight.w600,
-        //                 ),
-        //               ),
-        //             ],
-        //           ),
-        //           const SizedBox(height: 12),
-        //           TextField(
-        //             controller: _referralCodeController,
-        //             decoration: InputDecoration(
-        //               border: OutlineInputBorder(
-        //                 borderRadius: BorderRadius.circular(8),
-        //               ),
-        //               hintText: 'Enter referral code (e.g., REGTXXXX)',
-        //               hintStyle: const TextStyle(color: Colors.grey),
-        //               fillColor: const Color(0xff0a0a0a),
-        //               filled: true,
-        //             ),
-        //             style: const TextStyle(color: Colors.white),
-        //           ),
-        //           const SizedBox(height: 16),
-        //           ElevatedButton(
-        //             onPressed: _submitReferralCode,
-        //             style: ElevatedButton.styleFrom(
-        //               backgroundColor: const Color(0xffFFD700),
-        //               minimumSize: const Size(double.infinity, 48),
-        //               shape: RoundedRectangleBorder(
-        //                 borderRadius: BorderRadius.circular(8),
-        //               ),
-        //             ),
-        //             child: const Text(
-        //               'Submit',
-        //               style: TextStyle(color: Colors.black),
-        //             ),
-        //           ),
-        //         ],
-        //       ),
-        //     ),
-        //   ),
+        
         if (_hasReferrer)
           Padding(
             padding: const EdgeInsets.all(16),
@@ -780,28 +576,6 @@ class _ReferralsScreenState extends State<ReferralsScreen> {
                         ],
                       ),
                     ),
-                    // Expanded(
-                    //   child: Column(
-                    //     crossAxisAlignment: CrossAxisAlignment.start,
-                    //     children: [
-                    //       Text(
-                    //         '${_stats.thisMonthCommissions.toStringAsFixed(2)} REGT',
-                    //         style: TextStyle(
-                    //           color: Colors.green[400],
-                    //           fontSize: 20,
-                    //           fontWeight: FontWeight.bold,
-                    //         ),
-                    //       ),
-                    //       const Text(
-                    //         'This Month',
-                    //         style: TextStyle(
-                    //           color: Color(0xff808080),
-                    //           fontSize: 12,
-                    //         ),
-                    //       ),
-                    //     ],
-                    //   ),
-                    // ),
                   ],
                 ),
               ],

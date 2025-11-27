@@ -1,143 +1,3 @@
-// import 'package:flutter/material.dart';
-// import 'package:provider/provider.dart';
-// import 'package:regt_app/providers/app_state.dart';
-// import 'package:supabase_flutter/supabase_flutter.dart';
-// import 'screens/ads_screen.dart';
-// import 'screens/home_screen.dart';
-// import 'screens/login_screen.dart';
-// import 'screens/profile_screen.dart';
-// import 'screens/withdrawal_screen.dart';
-// import 'package:flutter_dotenv/flutter_dotenv.dart';
-// import 'package:app_links/app_links.dart';
-// import 'screens/reset_password_screen.dart';
-
-// // Global navigator key for navigation outside of widget tree
-// final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
-
-// void main() async {
-//   WidgetsFlutterBinding.ensureInitialized();
-
-//   // Load .env file
-//   await dotenv.load(fileName: ".env");
-
-//   // Initialize Supabase with PKCE + auto-refresh
-//   await Supabase.initialize(
-//     url: dotenv.env['SUPABASE_URL']!,
-//     anonKey: dotenv.env['SUPABASE_ANON_KEY']!,
-//     authOptions: const FlutterAuthClientOptions(
-//       authFlowType: AuthFlowType.pkce,
-//       autoRefreshToken: true, // Keeps user signed in
-//     ),
-//   );
-
-//   // Deep link handling (email confirmation, password reset, etc.)
-//   final appLinks = AppLinks();
-//   appLinks.uriLinkStream.listen((uri) async {
-//     if (uri != null) {
-//       try {
-//         await Supabase.instance.client.auth.getSessionFromUrl(uri);
-//       } catch (e) {
-//         debugPrint('Deep-link error: $e');
-//       }
-//     }
-//   });
-
-//   // Listen to auth state changes
-//   Supabase.instance.client.auth.onAuthStateChange.listen((data) {
-//     final event = data.event;
-//     final session = data.session;
-
-//     if (event == AuthChangeEvent.signedIn && session != null) {
-//       debugPrint('Signed in: ${session.user?.email}');
-//       navigatorKey.currentState?.pushReplacementNamed('/home');
-//     } else if (event == AuthChangeEvent.passwordRecovery) {
-//       debugPrint('Password recovery');
-//       navigatorKey.currentState?.pushNamed('/reset-password');
-//     } else if (event == AuthChangeEvent.signedOut) {
-//       debugPrint('Signed out');
-//       navigatorKey.currentState?.pushReplacementNamed('/login');
-//     }
-//   });
-
-//   runApp(
-//     ChangeNotifierProvider(create: (_) => AppState(), child: const MyApp()),
-//   );
-// }
-
-// class MyApp extends StatelessWidget {
-//   const MyApp({super.key});
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return MaterialApp(
-//       title: 'REGT Token Earning App',
-//       theme: ThemeData(
-//         primarySwatch: Colors.amber,
-//         scaffoldBackgroundColor: Colors.black,
-//         textTheme: const TextTheme(bodyLarge: TextStyle(color: Colors.white)),
-//       ),
-//       navigatorKey: navigatorKey,
-//       home: const _AuthWrapper(), // Smart initial screen
-//       routes: {
-//         '/home': (_) => const HomeScreen(),
-//         '/ads': (_) => const AdsScreen(),
-//         '/withdrawal': (_) => const WithdrawalScreen(),
-//         '/profile': (_) => const ProfileScreen(),
-//         '/reset-password': (_) => const ResetPasswordScreen(),
-//         '/login': (_) => const LoginScreen(),
-//       },
-//     );
-//   }
-// }
-
-// // Smart wrapper: decides Login vs Home on app start
-// class _AuthWrapper extends StatefulWidget {
-//   const _AuthWrapper();
-
-//   @override
-//   State<_AuthWrapper> createState() => _AuthWrapperState();
-// }
-
-// class _AuthWrapperState extends State<_AuthWrapper> {
-//   bool _checking = true;
-
-//   @override
-//   void initState() {
-//     super.initState();
-//     _checkSession();
-//   }
-
-//   Future<void> _checkSession() async {
-//     // Small delay to ensure Supabase finishes restoring session
-//     await Future.delayed(const Duration(milliseconds: 100));
-
-//     if (!mounted) return;
-
-//     final session = Supabase.instance.client.auth.currentSession;
-
-//     setState(() => _checking = false);
-
-//     if (session != null) {
-//       navigatorKey.currentState?.pushReplacementNamed('/home');
-//     } else {
-//       navigatorKey.currentState?.pushReplacementNamed('/login');
-//     }
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     if (_checking) {
-//       return const Scaffold(
-//         body: Center(
-//           child: CircularProgressIndicator(
-//             color: Color(0xFFFFD700),
-//           ),
-//         ),
-//       );
-//     }
-//     return const SizedBox.shrink(); // Will be replaced by navigation
-//   }
-// }
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -180,66 +40,7 @@ void main() async {
     }
     });
 
-  // Supabase.instance.client.auth.onAuthStateChange.listen((data) {
-  //   final event = data.event;
-  //   final session = data.session;
-
-  //   if (event == AuthChangeEvent.signedIn && session != null) {
-  //     debugPrint('Signed in: ${session.user?.email}');
-  //     navigatorKey.currentState?.pushReplacementNamed('/home');
-  //   } else if (event == AuthChangeEvent.passwordRecovery) {
-  //     debugPrint('Password recovery');
-  //     navigatorKey.currentState?.pushNamed('/reset-password');
-  //   } else if (event == AuthChangeEvent.signedOut) {
-  //     debugPrint('Signed out');
-  //     navigatorKey.currentState?.pushReplacementNamed('/login');
-  //   }
-  // });
-
-  // Supabase.instance.client.auth.onAuthStateChange.listen((data) async {
-  //   final event = data.event;
-  //   final session = data.session;
-
-  //   if (event == AuthChangeEvent.signedIn && session != null) {
-  //     debugPrint('Signed in: ${session.user?.email}');
-
-  //     final userId = session.user!.id;
-  //     final prefs = await SharedPreferences.getInstance();
-  //     final bool alreadySeen = prefs.getBool('referred_welcome_seen') ?? false;
-
-  //     if (alreadySeen) {
-  //       navigatorKey.currentState?.pushReplacementNamed('/home');
-  //       return;
-  //     }
-
-  //     try {
-  //       final response = await Supabase.instance.client
-  //           .from('referrals')
-  //           .select('referrer_id, profiles!referrer_id (email)')
-  //           .eq('referred_id', userId)
-  //           .maybeSingle();
-
-  //       if (response == null) {
-  //         // ✅ NO referrer found → show special welcome screen
-  //         navigatorKey.currentState?.pushReplacement(
-  //           MaterialPageRoute(
-  //             builder: (_) => ReferredWelcomeScreen(
-  //               referrerCode: 'WELCOME', // Or handle this appropriately
-  //               referrerEmail: 'No referrer',
-  //             ),
-  //           ),
-  //         );
-  //       } else {
-  //         // ✅ User HAS a referrer → go straight to home
-  //         navigatorKey.currentState?.pushReplacementNamed('/home');
-  //       }
-  //     } catch (e) {
-  //       debugPrint('Error checking referral: $e');
-  //       navigatorKey.currentState?.pushReplacementNamed('/home');
-  //     }
-  //   }
-  // });
-
+  
   Supabase.instance.client.auth.onAuthStateChange.listen((data) async {
     final event = data.event;
     final session = data.session;
@@ -263,14 +64,6 @@ void main() async {
 
       final userId = session.user.id;
 
-      // Check if user has already seen the referred welcome screen
-      // final prefs = await SharedPreferences.getInstance();
-      // final bool alreadySeen = prefs.getBool('referred_welcome_seen') ?? false;
-
-      // if (alreadySeen) {
-      //   navigatorKey.currentState?.pushReplacementNamed('/home');
-      //   return;
-      // }
 
       try {
         debugPrint('checking referral...');
@@ -283,9 +76,7 @@ void main() async {
             .maybeSingle();
 
         if (response == null) {
-          // No referral found → show special welcome screen
-          // await prefs.setBool('referred_welcome_seen', true);
-
+         
           debugPrint('no referral...');
           navigatorKey.currentState?.pushReplacement(
             MaterialPageRoute(
@@ -296,8 +87,7 @@ void main() async {
             ),
           );
         } else {
-          // User was referred by someone → skip welcome, mark as seen, go home
-          // await prefs.setBool('referred_welcome_seen', true);
+         
           debugPrint('has referral...');
           final referrerEmail = response['profiles']?['email'] ?? 'unknown';
           debugPrint('User was referred by: $referrerEmail');
@@ -306,12 +96,10 @@ void main() async {
         }
       } catch (e) {
         debugPrint('Error checking referral: $e');
-        // On error, still mark as seen to avoid infinite loop on next login
-        // await prefs.setBool('referred_welcome_seen', true);
+       
         navigatorKey.currentState?.pushReplacementNamed('/home');
       }
     }
-    // All other events (token refreshed, initial session, etc.) are ignored here
   });
 
   runApp(
@@ -347,10 +135,6 @@ class MyApp extends StatelessWidget {
   }
 }
 
-// ──────────────────────────────────────────────────────
-// NEW: Launcher that decides Onboarding vs normal flow
-// ──────────────────────────────────────────────────────
-
 class LauncherPage extends StatelessWidget {
   const LauncherPage({super.key});
 
@@ -384,10 +168,6 @@ class LauncherPage extends StatelessWidget {
     );
   }
 }
-
-// ──────────────────────────────────────────────────────
-// NEW: Simple Onboarding Screen (you can replace this later with a beautiful multi-page one)
-// ──────────────────────────────────────────────────────
 
 class OnboardingScreen extends StatelessWidget {
   const OnboardingScreen({super.key});
@@ -461,23 +241,7 @@ class OnboardingScreen extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 20),
-                // TextButton(
-                //   onPressed: () async {
-                //     // Skip onboarding (still mark as seen)
-                //     final prefs = await SharedPreferences.getInstance();
-                //     await prefs.setBool('hasSeenOnboarding', true);
-
-                //     if (context.mounted) {
-                //       Navigator.of(context).pushReplacement(
-                //         MaterialPageRoute(builder: (_) => const _AuthWrapper()),
-                //       );
-                //     }
-                //   },
-                //   child: const Text(
-                //     "Skip",
-                //     style: TextStyle(color: Colors.white54),
-                //   ),
-                // ),
+                
               ],
             ),
           ),
@@ -487,9 +251,6 @@ class OnboardingScreen extends StatelessWidget {
   }
 }
 
-// ──────────────────────────────────────────────────────
-// Your existing _AuthWrapper stays 100% unchanged
-// ──────────────────────────────────────────────────────
 
 class _AuthWrapper extends StatefulWidget {
   const _AuthWrapper();
@@ -507,21 +268,6 @@ class _AuthWrapperState extends State<_AuthWrapper> {
     _checkSession();
   }
 
-  // Future<void> _checkSession() async {
-  //   await Future.delayed(const Duration(milliseconds: 100));
-
-  //   if (!mounted) return;
-
-  //   final session = Supabase.instance.client.auth.currentSession;
-
-  //   setState(() => _checking = false);
-
-  //   if (session != null) {
-  //     navigatorKey.currentState?.pushReplacementNamed('/home');
-  //   } else {
-  //     navigatorKey.currentState?.pushReplacementNamed('/login');
-  //   }
-  // }
 
   Future<void> _checkSession() async {
     await Future.delayed(const Duration(milliseconds: 100));
@@ -530,7 +276,6 @@ class _AuthWrapperState extends State<_AuthWrapper> {
 
     final session = Supabase.instance.client.auth.currentSession;
 
-    // If no session → go to login (exactly like before)
     if (session == null) {
       setState(() => _checking = false);
       navigatorKey.currentState?.pushReplacementNamed('/login');
@@ -552,7 +297,6 @@ class _AuthWrapperState extends State<_AuthWrapper> {
       setState(() => _checking = false);
 
       if (response == null) {
-        // No referral found → show special welcome screen (exactly like in the listener)
         debugPrint('no referral...');
         navigatorKey.currentState?.pushReplacement(
           MaterialPageRoute(
@@ -563,7 +307,6 @@ class _AuthWrapperState extends State<_AuthWrapper> {
           ),
         );
       } else {
-        // User HAS a referrer → go straight to home (exactly like in the listener)
         debugPrint('has referral...');
         final referrerEmail = response['profiles']?['email'] ?? 'unknown';
         debugPrint('User was referred by: $referrerEmail');
