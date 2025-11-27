@@ -1,0 +1,362 @@
+// File: c:\Users\Youssef\Documents\flutter_apps\regt_app\lib\main.dart
+import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Supabase.initialize(
+    url: 'YOUR_SUPABASE_URL',
+    anonKey: 'YOUR_ANON_KEY',
+  );
+  runApp(ChangeNotifierProvider(
+    create: (_) => AppState(),
+    child: const MyApp(),
+  ));
+}
+
+class AppState extends ChangeNotifier {
+  String language = 'en';  // Default English
+  void changeLanguage(String newLang) {
+    language = newLang;
+    notifyListeners();
+  }
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Consumer<AppState>(
+      builder: (context, appState, child) {
+        return MaterialApp(
+          title: 'REGT Earn',
+          theme: ThemeData(
+            scaffoldBackgroundColor: Colors.black,
+            primarySwatch: Colors.amber,  # Gold accents
+            textTheme: const TextTheme(bodyLarge: TextStyle(color: Colors.white)),
+          ),
+          localizationsDelegates: const [
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+          ],
+          supportedLocales: const [
+            Locale('en'), Locale('ar'), Locale('hi'), Locale('fr'),
+          ],
+          locale: Locale(appState.language),
+          home: const LoginScreen(),
+          routes: {
+            '/home': (context) => const HomeScreen(),
+            '/ads': (context) => const AdsScreen(),
+            // Add more
+          },
+        );
+      },
+    );
+  }
+}
+
+// File: c:\Users\Youssef\Documents\flutter_apps\regt_app\lib\screens\ads_screen.dart
+import 'package:flutter/material.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+import 'dart:io';
+
+class AdsScreen extends StateFTWARE<AdsScreen> {
+  RewardedAd? _rewardedAd;
+  double _balance = 0.0;
+  int _adsWatched = 0;
+  bool _isAdReady = false;
+  bool _isOnCooldown = false;
+  DateTime? _lastAdTime;
+
+  String get _adUnitId {
+    return Platform.isAndroid
+        ? 'ca-app-pub-3940256099942544/5224354917'  // Test
+        : 'ca-app-pub-3940256099942544/1712485313';
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _loadAd();
+    _loadAdsWatched();  // From Supabase
+  }
+
+  Future<void> _loadAdsWatched() async {
+    final userId = Supabase.instance.client.auth.currentUser?.id;
+    final data = await Supabase.instance.client.from('ad_events').select('count(*) as count').eq('user_id', userId).eq('status', 'success').gte('timestamp', DateTime.now().subtract(const Duration(days: 1)));
+    _adsWatched = data[0]['count'] ?? 0;
+    setState(() {});
+  }
+
+  void _loadAd() {
+    RewardedAd.load(
+      adUnitId: _adUnitId,
+      request: const AdRequest(),
+      rewardedAdLoadCallback: RewardedAdLoadCallback(
+        onAdLoaded: (ad) => setState(() => _rewardedAd = ad; _isAdReady = true),
+        onAdFailedToLoad: (error) => _loadAd(),
+      ),
+    );
+  }
+
+  void _showAd() {
+    if (_rewardedAd == null || _isOnCooldown || _adsWatched >= 16) return;
+
+    _rewardedAd!.show(onUserEarnedReward: (ad, reward) async {
+      double baseReward = 0.006;
+      _adsWatched++;
+      if (_adsWatched % 10 == 0) baseReward += 1.0;
+      final userId = Supabase.instance.client.auth.currentUser?.id;
+      await Supabase.instance.client.from('ad_events').insert({
+        'user_id': userId,
+        'status': 'success',
+        'reward': baseReward,
+        'timestamp': DateTime.now().toIso8601String(),
+      });
+      await Supabase.instance.client.from('user_balances').update({
+        'balance': ServerValue.increment(baseReward),
+      }).eq('user_id', userId);
+      _isOnCooldown = true;
+      _lastAdTime = DateTime.now();
+      _startCooldown();
+    });
+    _rewardedAd = null;
+    _loadAd();
+  }
+
+  void _startCooldown() {
+    Future.delayed(const Duration(minutes: 5), () => if (mounted) setState(() => _isOnCooldown = false));
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // UI as per SRS: Daily limit, list of ads, cooldown timer
+    return Scaffold(
+      backgroundColor: Colors.black,
+      appBar: AppBar(title: const Text('Ads', style: TextStyle(color: Colors.white))),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text('Ads Watched: $_adsWatched / 16', style: const TextStyle(color: Colors.white)),
+            ElevatedButton(
+              onPressed: _showAd,
+              child: Text(_isOnCooldown ? 'Cooldown (5 min)' : 'Watch Ad'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+// File: c:\Users\Youssef\Documents\flutter_apps\regt_app\lib\screens\home_screen.dart
+import 'package:flutter/material.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:provider/provider.dart';
+import 'app_state.dart';  // Your AppState class
+
+class HomeScreen extends StatefulWidget {
+  const HomeScreen({super.key});
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  late SupabaseClient supabase;
+  double _balance = 0.0;
+  List<dynamic> _history = [];
+
+  @override
+  void initState() {
+    super.initState();
+    supabase = Supabase.instance.client;
+    _loadData();
+    _subscribeToBalance();
+  }
+
+  Future<void> _loadData() async {
+    final userId = supabase.auth.currentUser?.id;
+    final data = await supabase.from('user_balances').select().eq('user_id', userId).single();
+    setState(() {
+      _balance = data['balance'] ?? 0.0;
+      _history = data['transaction_history'] ?? [];
+    });
+  }
+
+  void _subscribeToBalance() {
+    final userId = supabase.auth.currentUser?.id;
+    supabase.channel('balance_updates').onPostgresChanges(
+      event: PostgresChangeEvent.update,
+      schema: 'public',
+      table: 'user_balances',
+      filter: PostgresChangeFilter(type: PostgresChangeFilterType.eq, column: 'user_id', value: userId),
+      callback: (payload) {
+        setState(() => _balance = payload.newRecord['balance']);
+      },
+    ).subscribe();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.black,
+      appBar: AppBar(title: const Text('REGT Dashboard', style: TextStyle(color: Colors.white))),
+      body: Column(
+        children: [
+          Card(
+            color: Colors.amber.withOpacity(0.2),
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Text('Balance: $_balance REGT (\$${_balance * 0.1})', style: const TextStyle(color: Colors.white, fontSize: 24)),
+            ),
+          ),
+          Expanded(
+            child: ListView.builder(
+              itemCount: _history.length,
+              itemBuilder: (context, index) => ListTile(
+                title: Text('${_history[index]['type']}: ${_history[index]['amount']}', style: const TextStyle(color: Colors.white)),
+              ),
+            ),
+          ),
+        ],
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        backgroundColor: Colors.black,
+        selectedItemColor: Colors.amber,
+        unselectedItemColor: Colors.white,
+        items: const [
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
+          BottomNavigationBarItem(icon: Icon(Icons.video_library), label: 'Ads'),
+          BottomNavigationBarItem(icon: Icon(Icons.question_answer), label: 'Surveys'),
+          BottomNavigationBarItem(icon: Icon(Icons.group), label: 'Referrals'),
+          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
+        ],
+        onTap: (index) {
+          // Navigate to screens
+          if (index == 1) Navigator.pushNamed(context, '/ads');
+          // Add for others
+        },
+      ),
+    );
+  }
+}
+
+
+// File: c:\Users\Youssef\Documents\flutter_apps\regt_app\lib\screens\login_screen.dart
+import 'package:flutter/material.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+
+class LoginScreen extends StatefulWidget {
+  const LoginScreen({super.key});
+
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+  final _storage = FlutterSecureStorage();
+
+  Future<void> _signUp() async {
+    try {
+      final response = await Supabase.instance.client.auth.signUp(
+        email: _emailController.text,
+        password: _passwordController.text,
+      );
+      if (response.session != null) {
+        await _initializeUser(response.user!.id);
+        _saveSession(response.session!);
+        Navigator.pushReplacementNamed(context, '/home');
+      }
+    } catch (e) {
+      _showError('$e');
+    }
+  }
+
+  Future<void> _signIn() async {
+    try {
+      final response = await Supabase.instance.client.auth.signInWithPassword(
+        email: _emailController.text,
+        password: _passwordController.text,
+      );
+      if (response.session != null) {
+        _saveSession(response.session!);
+        Navigator.pushReplacementNamed(context, '/home');
+      }
+    } catch (e) {
+      _showError('$e');
+    }
+  }
+
+  Future<void> _googleSignIn() async {
+    try {
+      final GoogleSignIn googleSignIn = GoogleSignIn();
+      final googleUser = await googleSignIn.signIn();
+      if (googleUser == null) return;
+
+      final googleAuth = await googleUser.authentication;
+      final accessToken = googleAuth.accessToken;
+      final idToken = googleAuth.idToken;
+
+      final response = await Supabase.instance.client.auth.signInWithIdToken(
+        provider: OAuthProvider.google,
+        idToken: idToken!,
+        accessToken: accessToken,
+      );
+      if (response.session != null) {
+        await _initializeUser(response.user!.id);
+        _saveSession(response.session!);
+        Navigator.pushReplacementNamed(context, '/home');
+      }
+    } catch (e) {
+      _showError('$e');
+    }
+  }
+
+  Future<void> _initializeUser(String userId) async {
+    await Supabase.instance.client.from('profiles').insert({'id': userId, 'email': _emailController.text, 'language': 'en'});
+    await Supabase.instance.client.from('user_balances').insert({'user_id': userId, 'balance': 1.0, 'transaction_history': '[{"type": "signup_gift", "amount": 1.0, "date": "${DateTime.now().toIso8601String()}"}]'} );
+  }
+
+  void _saveSession(Session session) async {
+    await _storage.write(key: 'access_token', value: session.accessToken);
+    // Store refresh_token similarly
+  }
+
+  void _showError(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message)));
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.black,
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text('REGT Earn', style: TextStyle(color: Colors.amber, fontSize: 24)),
+            TextField(controller: _emailController, decoration: InputDecoration(labelText: 'Email', labelStyle: TextStyle(color: Colors.white))),
+            TextField(controller: _passwordController, obscureText: true, decoration: InputDecoration(labelText: 'Password', labelStyle: TextStyle(color: Colors.white))),
+            ElevatedButton(onPressed: _signIn, child: Text('Login')),
+            ElevatedButton(onPressed: _signUp, child: Text('Sign Up')),
+            ElevatedButton(onPressed: _googleSignIn, child: Text('Google Sign In')),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
